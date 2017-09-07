@@ -24,7 +24,7 @@ $ stack install schematic
 
 ## Basic Examples
 
-```
+```haskell
 type SchemaExample
   = SchemaObject
     '[ '("foo", SchemaArray '[AEq 1] (SchemaNumber '[NGt 10]))
@@ -42,21 +42,21 @@ type SchemaExample
 
 This one is valid for example
 
-```
+```haskell
 schemaJson :: ByteString
 schemaJson = "{\"foo\": [13], \"bar\": null}"
 ```
 
 Also valid
 
-```
+```haskell
 schemaJson :: ByteString
 schemaJson = "{\"foo\": [13], \"bar\": \"bar\"}"
 ```
 
 it can be parsed and validated like this:
 
-```
+```haskell
 decodeAndValidateJson schemaJson :: ParseResult (JsonRepr SchemaExample)
 ```
 
@@ -69,7 +69,7 @@ decodeAndValidateJson schemaJson :: ParseResult (JsonRepr SchemaExample)
 It implies a transport layer representation of that data that can be traversed and transformed to whatever internal types user has. It's called `JsonRepr`. Type parameter is the schema itself.
 
 
-```
+```haskell
 jsonExample :: JsonRepr SchemaExample
 jsonExample = ReprObject $
   FieldRepr (ReprArray [ReprNumber 12])
@@ -83,7 +83,7 @@ It's possible to represent schema changes as a series of migrations, which descr
 
 This piece of code will apply a migration to the schema, decode and validate the latest version.
 
-```
+```haskell
 type SchemaExample
   = SchemaObject
     '[ '("foo", SchemaArray '[AEq 1] (SchemaNumber '[NGt 10]))
@@ -102,7 +102,7 @@ schemaJsonTopVersion = "{ \"foo\": 42, \"bar\": \"bar\" }"
 
 It's possible to decode the latest version like this:
 
-```
+```haskell
 decodeAndValidateJson schemaJsonTopVersion :: ParseResult (JsonRepr (TopVersion (AllVersions VS)))
 ```
 
@@ -110,7 +110,7 @@ decodeAndValidateJson schemaJsonTopVersion :: ParseResult (JsonRepr (TopVersion 
 
 It's possible to use `flens` to construct a field lens for a typed object in schematic. Let's suppose you have a schema like this:
 
-```
+```haskell
 type ArraySchema = 'SchemaArray '[AEq 1] ('SchemaNumber '[NGt 10])
 
 type ArrayField = '("foo", ArraySchema)
